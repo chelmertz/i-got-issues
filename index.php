@@ -15,6 +15,9 @@ $user = array_pop($output);
 $client = new Github_Client();
 $user_projects = $client->getRepoApi()->getUserRepos($user);
 $has_issues = false;
+if(PHP_SAPI != 'cli') {
+	ob_start();
+}
 foreach($user_projects as $p) {
 	$projects_open_issues = $client->getIssueApi()->getList($user, $p['name'], 'open');
 	if(!$projects_open_issues) {
@@ -34,14 +37,14 @@ foreach($user_projects as $p) {
 		"\n%s - %s (%s)\n%s",
 		$p['name'],
 		wordwrap($p['description']),
-		$p['url'],
+		PHP_SAPI != 'cli' ? '<a href="'.$p['url'].'">'.$p['url'].'</a>' : $p['url'],
 		str_repeat('=', strlen($p['name']))."\n"
 	);
 	foreach($users_own_issues as $issue) {
 		printf(
 			"#%d %s (%s)\n%s",
 			$issue['number'],
-			wordwrap($issue['title']),
+			PHP_SAPI != 'cli' ? '<a href="'.$p['url'].'/issues/'.$issue['number'].'">'.$issue['title'].'</a>' : wordwrap($issue['title']),
 			date('Y-m-d', strtotime($issue['created_at'])),
 			wordwrap($issue['description'])
 		);
@@ -49,5 +52,19 @@ foreach($user_projects as $p) {
 }
 if(!$has_issues) {
 	print("You own no open issues in your own projects, good job");
+}
+if(PHP_SAPI != 'cli') {
+	$content = ob_get_clean();
+	printf(
+		'<!doctype html>
+<html>
+<head>
+	<title>I got issues</title>
+	<meta charset="utf-8" />
+</head>
+<body><pre>%s</pre></body>
+</html>',
+		nl2br($content)
+	);
 }
 exit(0);
