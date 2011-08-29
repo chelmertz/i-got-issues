@@ -1,0 +1,3 @@
+[submodule "resources/php-github-api"]
+	path = resources/php-github-api
+	url = https://github.com/ornicar/php-github-api.git
