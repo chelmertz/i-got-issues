@@ -64,7 +64,7 @@ if(PHP_SAPI != 'cli') {
 </head>
 <body><pre>%s</pre></body>
 </html>',
-		nl2br($content)
+		$content
 	);
 }
 exit(0);
