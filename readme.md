@@ -11,6 +11,7 @@ After downloading, get the dependencies by
 ```bash
 git submodule init
 ```
+
 and you're good to go.
 
 ## usage
