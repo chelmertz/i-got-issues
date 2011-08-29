@@ -6,6 +6,12 @@ Display your submitted issues in your own projects, a.k.a. "todos"...
 
 Global git setting `github.user`, matching your username.
 
+After downloading, get the dependencies by
+```bash
+git submodule init
+```
+and you're good to go.
+
 ## usage
 ```php
 php index.php
