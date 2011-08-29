@@ -14,6 +14,7 @@ if(!$output) {
 $user = array_pop($output);
 $client = new Github_Client();
 $user_projects = $client->getRepoApi()->getUserRepos($user);
+$has_issues = false;
 foreach($user_projects as $p) {
 	$projects_open_issues = $client->getIssueApi()->getList($user, $p['name'], 'open');
 	if(!$projects_open_issues) {
@@ -22,6 +23,7 @@ foreach($user_projects as $p) {
 	$users_own_issues = array();
 	foreach($projects_open_issues as $issue) {
 		if($issue['user'] === $user) {
+			$has_issues = true;
 			$users_own_issues[] = $issue;
 		}
 	}
@@ -45,3 +47,7 @@ foreach($user_projects as $p) {
 		);
 	}
 }
+if(!$has_issues) {
+	print("You own no open issues in your own projects, good job");
+}
+exit(0);
